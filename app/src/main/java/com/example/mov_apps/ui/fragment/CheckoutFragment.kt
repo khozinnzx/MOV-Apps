@@ -38,8 +38,6 @@ class CheckoutFragment : Fragment(R.layout.fragment_checkout) {
     private val userCollectionRef = Firebase.firestore.collection("user")
     private val auth = FirebaseAuth.getInstance()
 
-    private var total: Int = 0
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentCheckoutBinding.bind(view)
@@ -72,8 +70,11 @@ class CheckoutFragment : Fragment(R.layout.fragment_checkout) {
                 is Resource.Success -> {
                     it.data?.let { dataUser ->
                         totalBalance = dataUser.saldo
-                        for (a in dataList.indices) {
-                            total += dataList[a].harga
+                        val harga = dataList.map { it.harga }
+                        Log.d("Checkout", "list harga = ${harga} ")
+                        var total = 0
+                        for (a in harga) {
+                            total += a
                             binding.tvTotalBalance.text = formatRupiah.format(totalBalance)
                             if (total <= totalBalance) {
                                 sisaSaldo = totalBalance - total

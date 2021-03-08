@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -16,19 +17,21 @@ import com.example.mov_apps.ui.MainActivity
 import com.example.mov_apps.ui.MoviesViewModel
 import com.example.mov_apps.utils.Constant
 import com.example.mov_apps.utils.Resource
+import com.google.firebase.auth.FirebaseAuth
 import java.util.*
 
 class EditProfileFragment: Fragment(R.layout.fragment_edit_profile) {
     private lateinit var binding: FragmentEditProfileBinding
     private lateinit var viewModel: MoviesViewModel
     var uriPhoto: Uri? = null
+    private val auth = FirebaseAuth.getInstance()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentEditProfileBinding.bind(view)
 
         viewModel = (activity as MainActivity).viewModel
-
+        viewModel.retrieveUser(auth.currentUser?.uid)
         viewModel.user.observe(viewLifecycleOwner, Observer {
             when (it) {
                 is Resource.Success -> {
@@ -37,9 +40,11 @@ class EditProfileFragment: Fragment(R.layout.fragment_edit_profile) {
                         Glide.with(this).load(dataUser.url).placeholder(R.drawable.ic_profile)
                             .centerCrop()
                             .into(binding.ivPhoto)
-                        binding.etNama.hint = dataUser.nama
-                        binding.etEmail.hint = dataUser.email
-                        binding.etUsername.hint = dataUser.username
+                        binding.etNama.setText(dataUser.nama)
+                        binding.etEmail.setText(dataUser.email)
+                        binding.etUsername.setText(dataUser.username)
+                        binding.etPassword.setText(dataUser.password)
+
                     }
                 }
                 is Resource.Error -> {
@@ -80,16 +85,22 @@ class EditProfileFragment: Fragment(R.layout.fragment_edit_profile) {
     }
 
     private fun updateUser() {
-        val username = binding.etUsername.toString()
-        val password = binding.etPassword.toString()
-        val name = binding.etNama.toString()
-        val email = binding.etEmail.toString()
-        viewModel.updateUser(username, password, name, email)
+        val username = binding.etUsername.text.toString()
+        val password = binding.etPassword.text.toString()
+        val name = binding.etNama.text.toString()
+        val email = binding.etEmail.text.toString()
 
-        val filename = UUID.randomUUID().toString()
-        viewModel.uploadImageToStorage(filename, uriPhoto)
-        binding.progressBar.visibility = View.INVISIBLE
-        findNavController().navigate(R.id.action_editProfileFragment_to_profileFragment)
+        if(username.isNotEmpty() && password.isNotEmpty() && name.isNotEmpty() && email.isNotEmpty()){
+            viewModel.updateUser(username, password, name, email)
+
+            val filename = UUID.randomUUID().toString()
+            viewModel.uploadImageToStorage(filename, uriPhoto)
+            binding.progressBar.visibility = View.INVISIBLE
+            findNavController().navigate(R.id.action_editProfileFragment_to_profileFragment)
+
+        }else{
+            Toast.makeText(activity, "semua data harus di isi", Toast.LENGTH_SHORT).show()
+        }
 
 
 
