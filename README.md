@@ -60,3 +60,6 @@ Teknologi yang digunakan untuk membangun aplikasi ini adalah :
 ### Edit Profile Screen
 <img src="https://user-images.githubusercontent.com/23197717/110309623-29a0f080-8034-11eb-8a65-a1553a420fb7.jpg" width="300" height="616" />
 
+
+informasi lebih lanjut atau ingin berdiskusi bisa kontak di khozinnzx@gmail.com
+
