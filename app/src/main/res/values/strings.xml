@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MOV-Apps</string>
+    <string name="lewati_perkenalan">LEWATI PERKENALAN</string>
+    <string name="lanjutkan">LANJUTKAN</string>
+    <string name="now_playing">Now Playing</string>
+    <string name="pre_sale">Pre Sale</string>
+    <string name="mulai">MEMULAI</string>
+    <string name="cashless">Cashless</string>
+    <string name="lewati_dulu">LEWATI DULU</string>
+    <string name="simpan_dan_lanjutkan">SIMPAN DAN LANJUTKAN</string>
+    <string name="description">The Avengers dan sekutu mereka harus bersedia
+mengorbankan segalanya dalam upaya untuk mengalahkan
+Thanos yang kuat sebelum ia berhasil menghancurkan alam
+semesta.</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+</resources>
