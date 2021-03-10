@@ -61,7 +61,7 @@ class SignUpActivity : AppCompatActivity() {
             CoroutineScope(Dispatchers.IO).launch {
                 try {
                     auth.createUserWithEmailAndPassword(email, password).await()
-                    val user = User(auth.currentUser?.uid, email, name, password, url = "", username, saldo = 100000)
+                    val user = User(auth.currentUser?.uid, email, name, password, url = "", username, saldo = 0)
                     userCollectionRef.add(user).await()
                     Log.d(TAG, "registerUser: berhasil -> $user ")
                     withContext(Dispatchers.Main) {

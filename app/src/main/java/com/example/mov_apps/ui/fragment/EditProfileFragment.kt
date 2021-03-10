@@ -96,7 +96,7 @@ class EditProfileFragment: Fragment(R.layout.fragment_edit_profile) {
             val filename = UUID.randomUUID().toString()
             viewModel.uploadImageToStorage(filename, uriPhoto)
             binding.progressBar.visibility = View.INVISIBLE
-            findNavController().navigate(R.id.action_editProfileFragment_to_profileFragment)
+            findNavController().navigate(R.id.action_editProfileFragment_to_homeFragment)
 
         }else{
             Toast.makeText(activity, "semua data harus di isi", Toast.LENGTH_SHORT).show()

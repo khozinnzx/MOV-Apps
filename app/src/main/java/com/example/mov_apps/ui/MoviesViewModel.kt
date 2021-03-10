@@ -1,15 +1,10 @@
 package com.example.mov_apps.ui
 
-import android.content.Intent
 import android.net.Uri
 import android.util.Log
-import android.view.View
-import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.fragment.findNavController
-import com.example.mov_apps.R
 import com.example.mov_apps.model.Checkout
 import com.example.mov_apps.model.Movie
 import com.example.mov_apps.model.MovieCheckout
@@ -29,7 +24,6 @@ import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import retrofit2.Response
 import java.lang.Exception
-import java.net.URI
 
 const val TAG = "ViewModel"
 
@@ -79,34 +73,40 @@ class MoviesViewModel(val moviesRepository: MoviesRepository) : ViewModel() {
         }
     }
 
-    fun updateSeatSelected(seatSelected: ArrayList<Checkout>) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val userQuery = checkoutCollectionRef
+    fun topUpSaldo(saldo: Double, date: String) {
+        viewModelScope.launch {
+            val userQuery = userCollectionRef
                 .whereEqualTo("uid", auth.currentUser?.uid).get().await()
             if (userQuery.documents.isNotEmpty()) {
                 for (document in userQuery) {
                     try {
-                        checkoutCollectionRef.document(document.id).update("seat", seatSelected)
-                            .await()
-                        Log.d(TAG, "updateSeatToFirestore: success ")
-
+                        val currentSaldo = document.data["saldo"].toString().toDouble()
+                        Log.d(TAG, "current saldo = $currentSaldo")
+                        val updatedSaldo = currentSaldo + saldo
+                        userCollectionRef.document(document.id).update("saldo", updatedSaldo).await()
+                        addMoviesCheckout(auth.currentUser?.uid, title = "Top Up", 0, date, null, null, null, saldo, status ="topup")
+                        withContext(Dispatchers.Main) {
+                            Log.d(TAG, "update saldo: Success ")
+                        }
                     } catch (e: Exception) {
-                        Log.d(TAG, "updateSeatToFirestore: failed ")
+                        Log.d(TAG, "update saldo: failed")
                     }
                 }
             }
-
         }
     }
+
 
     fun addMoviesCheckout(
         uid: String?,
         title: String,
         rating: Int,
         date: String,
-        place: String,
-        seat: ArrayList<Checkout>,
-        poster: String
+        place: String?,
+        seat: ArrayList<Checkout>?,
+        poster: String?,
+        harga: Double,
+        status: String
     ) {
         viewModelScope.launch {
             try {
@@ -118,7 +118,9 @@ class MoviesViewModel(val moviesRepository: MoviesRepository) : ViewModel() {
                         date,
                         place,
                         seat,
-                        poster
+                        poster,
+                        harga,
+                        status
                     )
                 checkoutCollectionRef.add(movieCheckout).await()
                 Log.d(TAG, "addMoviesCheckout: success")

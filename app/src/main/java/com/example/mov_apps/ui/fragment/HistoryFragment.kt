@@ -34,8 +34,10 @@ class HistoryFragment : Fragment(R.layout.fragment_history) {
                     is Resource.Success -> {
                         binding.progressBar.visibility = View.INVISIBLE
                         it.data?.let { listCheckoutMovie ->
-                            binding.tvJumlah.text = listCheckoutMovie.size.toString() + "tiket"
-                            setupRvCheckout(listCheckoutMovie)
+                            val list = listCheckoutMovie.filter { data ->
+                                data.status == "bayar"
+                            }
+                            setupRvCheckout(list)
 
                         }
                     }

@@ -62,8 +62,8 @@
         android:name="com.example.mov_apps.ui.fragment.EditProfileFragment"
         android:label="EditProfileFragment" >
         <action
-            android:id="@+id/action_editProfileFragment_to_profileFragment"
-            app:destination="@id/profileFragment"
+            android:id="@+id/action_editProfileFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
             app:enterAnim="@anim/slide_down"
             app:exitAnim="@anim/slide_up"
             app:popUpTo="@+id/homeFragment"
@@ -84,7 +84,15 @@
     <fragment
         android:id="@+id/myWalletFragment"
         android:name="com.example.mov_apps.ui.fragment.MyWalletFragment"
-        android:label="MyWalletFragment" />
+        android:label="MyWalletFragment" >
+        <action
+            android:id="@+id/action_myWalletFragment_to_topUpFragment"
+            app:destination="@id/topUpFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+    </fragment>
     <fragment
         android:id="@+id/pilihBangkuFragment"
         android:name="com.example.mov_apps.ui.fragment.PilihBangkuFragment"
@@ -165,5 +173,27 @@
         <argument
             android:name="checkoutMovie"
             app:argType="com.example.mov_apps.model.MovieCheckout" />
+    </fragment>
+    <fragment
+        android:id="@+id/successTopUpFragment"
+        android:name="com.example.mov_apps.ui.fragment.SuccessTopUpFragment"
+        android:label="SuccessTopUpFragment" >
+        <action
+            android:id="@+id/action_successTopUpFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:enterAnim="@anim/slide_down"
+            app:exitAnim="@anim/slide_up"
+            app:popUpTo="@+id/homeFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+    <fragment
+        android:id="@+id/topUpFragment"
+        android:name="com.example.mov_apps.ui.fragment.TopUpFragment"
+        android:label="TopUpFragment" >
+        <action
+            android:id="@+id/action_topUpFragment_to_successTopUpFragment"
+            app:destination="@id/successTopUpFragment"
+            app:enterAnim="@anim/expand_in"
+            app:popExitAnim="@anim/expand_out"/>
     </fragment>
 </navigation>

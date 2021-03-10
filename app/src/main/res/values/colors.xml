@@ -11,5 +11,7 @@
     <color name="color_background">#13153B</color>
     <color name="color_gray">#292A50</color>
     <color name="color_red">#ed4169</color>
+    <color name="color_white_gray">#7A7575</color>
+    <color name="color_pink">#F15C8E</color>
 
 </resources>

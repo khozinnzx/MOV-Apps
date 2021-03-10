@@ -9,13 +9,14 @@ data class MovieCheckout(
     var title: String?,
     var rating: Int?,
     var dateAndTime: String?,
-    var place: String? ,
+    var place: String?,
     var seat: MutableList<Checkout>?,
-    var poster: String? ,
-): Parcelable
-{
+    var poster: String?,
+    var harga: Double,
+    var status: String?
+) : Parcelable {
     // empty constructor to allow deserialization
-    constructor() : this(null,null, 0, null, null, null, null)
+    constructor() : this(null, null, 0, null, null, null, null, 0.0, null)
 
 }
 

@@ -10,9 +10,11 @@ import com.example.mov_apps.databinding.ItemComingSoonBinding
 import com.example.mov_apps.model.MovieCheckout
 import com.example.mov_apps.model.Result
 
-class HistoryAdapter(val list: List<MovieCheckout>): RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() {
+class HistoryAdapter(val list: List<MovieCheckout>) :
+    RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() {
 
-    inner class HistoryViewHolder(val binding: ItemComingSoonBinding): RecyclerView.ViewHolder(binding.root)
+    inner class HistoryViewHolder(val binding: ItemComingSoonBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryViewHolder {
         return HistoryViewHolder(
@@ -30,19 +32,20 @@ class HistoryAdapter(val list: List<MovieCheckout>): RecyclerView.Adapter<Histor
             holder.binding.tvTitle.text = list.title
             holder.binding.tvDate.text = list.dateAndTime
             holder.binding.tvRate.text = list.rating.toString()
-            setOnClickListener{
+            setOnClickListener {
                 onItemClickListener?.let { it(list) }
             }
         }
+
     }
 
     override fun getItemCount(): Int {
-       return list.size
+        return list.size
     }
 
     private var onItemClickListener: ((MovieCheckout) -> Unit)? = null
 
-    fun setOnItemClickListener(listener: (MovieCheckout) -> Unit){
+    fun setOnItemClickListener(listener: (MovieCheckout) -> Unit) {
         onItemClickListener = listener
     }
 

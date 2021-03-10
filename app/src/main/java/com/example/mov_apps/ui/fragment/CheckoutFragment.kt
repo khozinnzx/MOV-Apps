@@ -1,9 +1,9 @@
 package com.example.mov_apps.ui.fragment
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -11,8 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mov_apps.R
 import com.example.mov_apps.adapter.CheckOutAdapter
 import com.example.mov_apps.databinding.FragmentCheckoutBinding
-import com.example.mov_apps.model.Checkout
-import com.example.mov_apps.model.MovieCheckout
 import com.example.mov_apps.ui.MainActivity
 import com.example.mov_apps.ui.MoviesViewModel
 import com.example.mov_apps.utils.Resource
@@ -23,7 +21,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
 import java.lang.Exception
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
@@ -38,6 +35,7 @@ class CheckoutFragment : Fragment(R.layout.fragment_checkout) {
     private val userCollectionRef = Firebase.firestore.collection("user")
     private val auth = FirebaseAuth.getInstance()
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentCheckoutBinding.bind(view)
@@ -47,6 +45,7 @@ class CheckoutFragment : Fragment(R.layout.fragment_checkout) {
         val movie = args.resultMovie
         val dataList = args.dataList.toCollection(ArrayList())
         var totalBalance = 0
+        var total = 0
         var sisaSaldo = 0
         val place = binding.tvPlace.text.toString()
 
@@ -70,24 +69,21 @@ class CheckoutFragment : Fragment(R.layout.fragment_checkout) {
                 is Resource.Success -> {
                     it.data?.let { dataUser ->
                         totalBalance = dataUser.saldo
-                        val harga = dataList.map { it.harga }
+                        val harga = dataList.map { checkout ->
+                            checkout.harga }
                         Log.d("Checkout", "list harga = ${harga} ")
-                        var total = 0
-                        for (a in harga) {
-                            total += a
-                            binding.tvTotalBalance.text = formatRupiah.format(totalBalance)
-                            if (total <= totalBalance) {
-                                sisaSaldo = totalBalance - total
-                                binding.tvTotalHarga.setTextColor(resources.getColor(R.color.teal_700))
-                                binding.tvTotalHarga.text = formatRupiah.format(total)
-                                binding.btnBayarSekarang.visibility = View.VISIBLE
-                            } else {
-                                binding.tvTotalHarga.setTextColor(resources.getColor(R.color.color_red))
-                                binding.tvTotalHarga.text = formatRupiah.format(total)
-                                binding.tvAlertSaldo.text =
-                                    "Maaf Saldo E-Wallet anda tidak cukup, silahkan isi terlebih dahulu"
-                            }
-
+                        total = harga.sum()
+                        binding.tvTotalBalance.text = formatRupiah.format(totalBalance)
+                        if (total <= totalBalance) {
+                            sisaSaldo = totalBalance - total
+                            binding.tvTotalHarga.setTextColor(Color.GREEN)
+                            binding.tvTotalHarga.text = formatRupiah.format(total)
+                            binding.btnBayarSekarang.visibility = View.VISIBLE
+                        } else {
+                            binding.tvTotalHarga.setTextColor(Color.RED)
+                            binding.tvTotalHarga.text = formatRupiah.format(total)
+                            binding.tvAlertSaldo.text =
+                                "Maaf Saldo E-Wallet anda tidak cukup, silahkan isi terlebih dahulu"
                         }
 
                     }
@@ -111,8 +107,11 @@ class CheckoutFragment : Fragment(R.layout.fragment_checkout) {
                     formatedDate,
                     place,
                     dataList,
-                    movie.poster_path
+                    movie.poster_path,
+                    total.toDouble(),
+                    "bayar"
                 )
+
                 Log.d("CheckOut", "save moviesCheckout: success ")
                 binding.progressBar3.visibility = View.GONE
                 binding.btnBayarSekarang.visibility = View.VISIBLE
