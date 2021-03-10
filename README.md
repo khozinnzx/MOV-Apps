@@ -1,7 +1,7 @@
 # MOV-Apps
 Aplikasi Pembelian Tiket dengan memanfaatkan API dari developer.moviedb.org serta database cloud firestore
 
-## Desgin Aplikasi
+## Design Aplikasi
 Design dibuat dengan menggunakan adobe xd
 ![design](https://user-images.githubusercontent.com/23197717/110306599-95815a00-8030-11eb-9401-2f6f1eada7f2.png)
 
